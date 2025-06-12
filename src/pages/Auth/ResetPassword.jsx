@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 const ResetPassword = () => {
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2 ,width:"100vw"}}>
       <ResetPasswordForm />
     </Box>
   );

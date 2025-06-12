@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Chip } from '@mui/material';
 import DataGrid from '../../Common/DataGrid';
 
-const ViewCourses = () => {
+const ExStudent = () => {
   const coursesData = [
     {
       id: 1,
@@ -161,7 +161,7 @@ const ViewCourses = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Courses
+       Ex-Students
       </Typography>
       <DataGrid
         columns={columns}
@@ -183,4 +183,4 @@ const ViewCourses = () => {
   );
 };
 
-export default ViewCourses;
+export default ExStudent;

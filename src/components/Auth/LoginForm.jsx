@@ -48,7 +48,7 @@ const LoginForm = ({ onLogin }) => {
     <Box
       sx={{
         display: 'flex',
-        minHeight: '80vh',
+        minHeight: '100vh',
         ml: 'auto',
         mr: 'auto',
         boxShadow: 4,

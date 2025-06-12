@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 const Login = ({ onLogin }) => {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100vw' }}>
       <LoginForm onLogin={onLogin} />
     </Box>
   );

@@ -1,27 +1,34 @@
 import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
-const SidebarItem = ({ icon, label, to, onClick }) => {
+const SidebarItem = ({ icon, label, to, onClick, sx }) => {
   return (
     <ListItem
       button
       component={NavLink}
       to={to}
       onClick={onClick}
-      exact="true"
-      style={({ isActive }) => ({
-        backgroundColor: isActive ? '#1976d2' : 'transparent',
-        color: isActive ? '#fff' : 'inherit',
-        borderRadius: 4,
-        marginBottom: 4,
-        textDecoration: 'none',
-      })}
+      end
+      style={{ paddingLeft: '10px' }}
+      sx={{
+        borderRadius: 1,
+        mb: 1,
+        mt: 1,
+        color: "#c2c7d0",
+        pl: '10px', // ✅ Correct usage without !important
+        '&.active': {
+          bgcolor: 'rgba(255, 255, 255, .9)', 
+          color: '#343a40', 
+          '& .MuiListItemIcon-root': { color: '#343a40' }, 
+          '&:hover': { bgcolor: 'rgba(255, 255, 255, .9)', color: "#343a40" }, 
+        },
+        '&:hover': { bgcolor: 'rgba(255, 255, 255, .1)', color: "white" }, 
+        ...sx, 
+      }}
     >
-      {icon && <ListItemIcon sx={{ color: 'inherit' }}>{icon}</ListItemIcon>}
-      <ListItemText primary={label} />
+      {icon && <ListItemIcon sx={{ color: 'inherit', minWidth:"30px"}}>{icon}</ListItemIcon>}
+      <ListItemText primary={label}  />
     </ListItem>
   );
 };
