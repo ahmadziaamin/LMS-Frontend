@@ -9,6 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Sidebar from "./components/Sidebar/Sidebar";
+import Topbar from "./components/Sidebar/Topbar";
 
 import Dashboard from "./pages/Dashboard";
 import AddCourse from "./pages/Courses/AddCourse";
@@ -17,18 +18,38 @@ import Login from "./pages/Auth/Login";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import EditProfile from "./components/Profile/EditProfile";
 import ViewProfile from "./components/Profile/ViewProfile";
-import Topbar from "./components/Sidebar/Topbar";
-import "./App.css";
+
 import StudentRequest from "./pages/Signup/StudentRequest";
 import TeacherRequest from "./pages/Signup/TeacherRequest";
+
 import AssignedSttudent from "./pages/Student/AssignedSttudent";
 import EnrolledStudent from "./pages/Student/EnrolledStudent";
 import ExStudent from "./pages/Student/ExStudent";
+
 import CareerRequest from "./pages/Teacher/CareerRequest";
 import FavourtieTeacher from "./pages/Teacher/FavourtieTeacher";
 import ExTeacher from "./pages/Teacher/ExTeacher";
 
+import CreateCoupans from "./pages/Coupans/CreateCoupans";
+import ViewCoupans from "./pages/Coupans/ViewCoupans";
+
+import AddBooks from "./pages/Libarary/AddBooks";
+import UploadsBooks from "./pages/Libarary/UploadsBooks";
+import ViewBooks from "./pages/Libarary/ViewBooks";
+
+import PaymetStatus from "./pages/Payments/PaymetStatus";
+import PendingPayment from "./pages/Payments/PendingPayment";
+import ReceivedPayments from "./pages/Payments/ReceivedPayments";
+
+import PromoRequest from "./pages/PromoStudent/PromoRequest";
+import CreateLinks from "./pages/Zoom/CreateLinks";
+
+import FeeReceipt from "./pages/FeeReceipt/FeeReceipt";
+
+import "./App.css";
+
 const drawerWidth = 240;
+const collapsedWidth = 64;
 
 const PrivateRoute = ({ loggedIn, children }) => {
   return loggedIn ? children : <Navigate to="/auth/login" replace />;
@@ -37,9 +58,14 @@ const PrivateRoute = ({ loggedIn, children }) => {
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
   };
 
   const handleLogin = () => {
@@ -55,31 +81,41 @@ function App() {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
 
-        {/* Sidebar (Drawer) */}
         {loggedIn && (
           <Sidebar
             mobileOpen={mobileOpen}
             handleDrawerToggle={handleDrawerToggle}
             onLogout={handleLogout}
             drawerWidth={drawerWidth}
+            collapsed={collapsed}
+            toggleCollapse={toggleCollapse}
           />
         )}
 
-        {/* Main content area */}
         <Box
           component="main"
           sx={{
             flexGrow: 1,
-            // width: { sm: loggedIn ? `calc(100vw - ${drawerWidth}px)` : '100vw' },
-            ml: { sm: loggedIn ? `${drawerWidth}px` : 0 },
+            ml: { 
+              sm: loggedIn ? `${collapsed ? collapsedWidth : drawerWidth}px` : 0 
+            },
             minHeight: "100vh",
             bgcolor: "#f5f5f5",
-            transition: "margin 0.3s, width 0.3s",
-            overflow: "hidden",
+            transition: (theme) => theme.transitions.create(['margin', 'width'], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
+            }),
+            width: { sm: `calc(100vw - ${collapsed ? collapsedWidth : drawerWidth}px) !important` },
           }}
         >
-          {loggedIn && <Topbar />}
-          {/* <Topbar/> */}
+          {loggedIn && (
+            <Topbar 
+              toggleSidebar={handleDrawerToggle} 
+              toggleCollapse={toggleCollapse}
+              collapsed={collapsed}
+            />
+          )}
+          {/* <Toolbar />  */}
           <Routes>
             <Route
               path="/auth/login"
@@ -92,6 +128,7 @@ function App() {
               }
             />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
+
             <Route
               path="/dashboard"
               element={
@@ -100,6 +137,8 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Courses */}
             <Route
               path="/courses"
               element={
@@ -116,6 +155,8 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Profile */}
             <Route
               path="/profile/view"
               element={
@@ -132,6 +173,8 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Signup Requests */}
             <Route
               path="/signup/student-request"
               element={
@@ -148,6 +191,8 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Student */}
             <Route
               path="/student/assigned-student"
               element={
@@ -172,6 +217,8 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Teacher */}
             <Route
               path="/teacher/career-request"
               element={
@@ -196,6 +243,108 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            {/* Coupons */}
+            <Route
+              path="/coupan/create-coupon"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <CreateCoupans />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/coupan/view-coupon"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <ViewCoupans />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Library */}
+            <Route
+              path="/library/add-books"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <AddBooks />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/library/view-books"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <ViewBooks />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/library/upload-books"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <UploadsBooks />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Payments */}
+            <Route
+              path="/payment/payment-status"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <PaymetStatus />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/payment/received-payments"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <ReceivedPayments />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/payment/pending-payments"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <PendingPayment />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Promote Students */}
+            <Route
+              path="/promote-Students/promote-request"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <PromoRequest />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Zoom Links */}
+            <Route
+              path="/zoom/create-zoom-link"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <CreateLinks />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Fee Receipt */}
+            <Route
+              path="/fee-receipt/send-receipt"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <FeeReceipt />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Catch-All Route */}
             <Route
               path="*"
               element={

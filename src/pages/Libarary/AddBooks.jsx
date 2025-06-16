@@ -3,33 +3,36 @@ import {
   Box, 
   Paper, 
   Typography, 
-  Divider,
   TextField,
   Button,
   Alert,
-  MenuItem
+  MenuItem,
+  InputAdornment,
+  IconButton
 } from '@mui/material';
 import { 
   ArrowBack as ArrowBackIcon,
-  Save as SaveIcon
+  Save as SaveIcon,
+  CloudUpload as CloudUploadIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Accordion from '../../Common/ Accordion';
-const EditProfile = () => {
+
+const AddBooks = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({
-    fullname: 'Ali Johar',
-    gender: 'Male',
-    dob: '2022-03-05',
-    country: 'Pakistan',
-    city: 'Lahore',
-    phone: '03234042785',
-    email: 'osa.official@gmail.com',
+  const [book, setBook] = useState({
+    bookId: 'QQABOK1045',
+    bookName: '',
+    bookStatus: '',
+    uploadBookName: '',
+    bookAuthor: '',
+    bookPrice: 0,
+    status: ''
   });
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (field, value) => {
-    setProfile(prev => ({
+    setBook(prev => ({
       ...prev,
       [field]: value
     }));
@@ -44,26 +47,26 @@ const EditProfile = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom sx={{ color: '#333', mb: 3 }}>
-        Edit Profile
+        Add Books
       </Typography>
 
       {submitSuccess && (
         <Alert severity="success" sx={{ mb: 3 }}>
-          Profile updated successfully!
+          Book added successfully!
         </Alert>
       )}
 
       <Paper elevation={3} sx={{ mb: 4, borderRadius: 1, p: 0 }}>
-        <Accordion title="Profile Information">
+        <Accordion title="Book Information">
           {/* First Row */}
           <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
             <Box sx={{ flex: 1 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                Fullname
+                Book ID
               </Typography>
               <TextField
-                value={profile.fullname}
-                onChange={(e) => handleChange('fullname', e.target.value)}
+                value={book.bookId}
+                onChange={(e) => handleChange('bookId', e.target.value)}
                 variant="outlined"
                 fullWidth
                 size="small"
@@ -71,96 +74,148 @@ const EditProfile = () => {
             </Box>
             <Box sx={{ flex: 1 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                Date of Birth
+                Book Name
               </Typography>
               <TextField
-                type="date"
-                value={profile.dob}
-                onChange={(e) => handleChange('dob', e.target.value)}
+                value={book.bookName}
+                onChange={(e) => handleChange('bookName', e.target.value)}
                 variant="outlined"
                 fullWidth
                 size="small"
-              />
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                City
-              </Typography>
-              <TextField
-                value={profile.city}
-                onChange={(e) => handleChange('city', e.target.value)}
-                variant="outlined"
-                fullWidth
-                size="small"
-              />
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                Email
-              </Typography>
-              <TextField
-                type="email"
-                value={profile.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                variant="outlined"
-                fullWidth
-                size="small"
+                placeholder="Book Name"
               />
             </Box>
           </Box>
+
+          {/* Second Row */}
           <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
             <Box sx={{ flex: 1 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                Gender
+                Book Image (215x285)
+              </Typography>
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<CloudUploadIcon />}
+                fullWidth
+                sx={{ justifyContent: 'flex-start', height: '40px' }}
+              >
+                Choose file
+                <input type="file" hidden />
+              </Button>
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
+                Book Status
               </Typography>
               <TextField
                 select
-                value={profile.gender}
-                onChange={(e) => handleChange('gender', e.target.value)}
+                value={book.bookStatus}
+                onChange={(e) => handleChange('bookStatus', e.target.value)}
                 variant="outlined"
                 fullWidth
                 size="small"
               >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
+                <MenuItem value="">Choose Status</MenuItem>
+                <MenuItem value="Available">Available</MenuItem>
+                <MenuItem value="Unavailable">Unavailable</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+
+          {/* Third Row */}
+          <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
+                Upload Free Book Name
+              </Typography>
+              <TextField
+                select
+                value={book.uploadBookName}
+                onChange={(e) => handleChange('uploadBookName', e.target.value)}
+                variant="outlined"
+                fullWidth
+                size="small"
+              >
+                <MenuItem value="">Upload Book Name</MenuItem>
+                {/* Additional options would go here */}
               </TextField>
             </Box>
             <Box sx={{ flex: 1 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-                Country
+                Book Author
               </Typography>
               <TextField
-                value={profile.country}
-                onChange={(e) => handleChange('country', e.target.value)}
+                select
+                value={book.bookAuthor}
+                onChange={(e) => handleChange('bookAuthor', e.target.value)}
                 variant="outlined"
                 fullWidth
                 size="small"
+              >
+                <MenuItem value="">Book Author</MenuItem>
+                {/* Additional options would go here */}
+              </TextField>
+            </Box>
+          </Box>
+
+          {/* Fourth Row */}
+          <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
+                Related Book Image (310x135)
+              </Typography>
+              <Button
+                component="label"
+                variant="outlined"
+                startIcon={<CloudUploadIcon />}
+                fullWidth
+                sx={{ justifyContent: 'flex-start', height: '40px' }}
+              >
+                Choose file
+                <input type="file" hidden />
+              </Button>
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
+                Book Price
+              </Typography>
+              <TextField
+                type="number"
+                value={book.bookPrice}
+                onChange={(e) => handleChange('bookPrice', e.target.value)}
+                variant="outlined"
+                fullWidth
+                size="small"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
               />
             </Box>
           </Box>
 
-       
+          {/* Fifth Row */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#444' }}>
-              Phone No
+              Status
             </Typography>
             <TextField
-              value={profile.phone}
-              onChange={(e) => handleChange('phone', e.target.value)}
+              select
+              value={book.status}
+              onChange={(e) => handleChange('status', e.target.value)}
               variant="outlined"
               fullWidth
               size="small"
-            />
+            >
+              <MenuItem value="">Choose Status</MenuItem>
+              <MenuItem value="Active">Active</MenuItem>
+              <MenuItem value="Inactive">Inactive</MenuItem>
+            </TextField>
           </Box>
         </Accordion>
       </Paper>
 
-
       <Box sx={{ display: 'flex', justifyContent: 'end', mt: 4 }}>
-      
         <Button 
           variant="contained" 
           color="primary" 
@@ -177,11 +232,11 @@ const EditProfile = () => {
             }
           }}
         >
-          Save Changes
+          Save Book
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default EditProfile;
+export default AddBooks;

@@ -1,61 +1,66 @@
 import React from "react";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { dashboardData } from "../components/DashBoard/DashBoardData";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", mb: 3 }}>
         Dashboard
       </Typography>
 
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          justifyContent: "center",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: 3,
+          [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: "1fr",
+          }
         }}
       >
         {dashboardData.map((item) => (
-          <Box
+          <Paper
             key={item.id}
+            elevation={3}
             sx={{
-              minWidth: "300px",
-              flex: "1 1 calc(25% - 16px)", // 4 in a row with spacing
-              maxWidth: "calc(25% - 16px)",
+              backgroundColor: item.color,
+              color: "#fff",
+              p: 3,
+              borderRadius: "10px",
+              cursor: "pointer",
+              transition: "transform 0.2s, box-shadow 0.2s",
+              "&:hover": {
+                transform: "translateY(-5px)",
+                boxShadow: theme.shadows[6],
+              },
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "150px",
             }}
+            onClick={() => navigate(item.route)}
           >
-            <Paper
-              sx={{
-                backgroundColor: item.color,
-                color: "#fff",
-                p: 2,
-                height: "120px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                borderRadius: "10px",
-                transition: "transform 0.2s",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-              onClick={() => navigate(item.route)}
-            >
-              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="h5" sx={{ fontWeight: "bold", fontSize: "1.8rem" }}>
                 {item.count}
               </Typography>
-              <Typography sx={{ textAlign: "center", mt: 1 }}>
-                {item.title}
+              {item.subtitle && (
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1 }}>
+                  {item.subtitle}
+                </Typography>
+              )}
+              <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
+                {item.title} {item.emoji}
               </Typography>
-            </Paper>
-          </Box>
+            </Box>
+            <Typography variant="caption" sx={{ opacity: 0.8, mt: 1 }}>
+              Click for {item.title.toLowerCase()} {item.emoji}
+            </Typography>
+          </Paper>
         ))}
       </Box>
     </Box>

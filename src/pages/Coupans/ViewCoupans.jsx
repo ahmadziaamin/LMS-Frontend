@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
+  Chip, 
   Button, 
   IconButton, 
   TextField,
   InputAdornment,
-  Chip
+  Menu,
+  MenuItem
 } from '@mui/material';
 import {
   FileCopy as CopyIcon,
@@ -21,45 +23,56 @@ import {
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const EnrolledStudent = () => {
-  // Generate 30 dummy student records
-  const generateStudents = () => {
-    const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
-    const cities = ['New York', 'Toronto', 'London', 'Sydney', 'Karachi', 'Mumbai', 'Dubai'];
-    const genders = ['Male', 'Female', 'Other'];
-    const statuses = ['Active', 'Pending', 'Rejected'];
-    
-    return Array.from({ length: 30 }, (_, i) => ({
-      id: i + 1,
-      courseId: `STU${1000 + i}`,
-      fullName: `Student ${i + 1}`,
-      gender: genders[Math.floor(Math.random() * genders.length)],
-      country: countries[Math.floor(Math.random() * countries.length)],
-      city: cities[Math.floor(Math.random() * cities.length)],
-      phoneNo: `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`,
-      email: `student${i + 1}@example.com`,
-      password: `pass${1000 + i}`,
-      status: statuses[Math.floor(Math.random() * statuses.length)]
-    }));
-  };
+const ViewCoupons = () => {
+  const couponsData = [
+    {
+      id: 1,
+      couponId: 'CPN001',
+      couponName: 'Summer Sale',
+      couponType: 'Percentage',
+      status: 'Active'
+    },
+    {
+      id: 2,
+      couponId: 'CPN002',
+      couponName: 'New User',
+      couponType: 'Fixed Amount',
+      status: 'Active'
+    },
+    {
+      id: 3,
+      couponId: 'CPN003',
+      couponName: 'Holiday Special',
+      couponType: 'Free Shipping',
+      status: 'Inactive'
+    },
+    {
+      id: 4,
+      couponId: 'CPN004',
+      couponName: 'Clearance',
+      couponType: 'Percentage',
+      status: 'Active'
+    },
+    {
+      id: 5,
+      couponId: 'CPN005',
+      couponName: 'Member Exclusive',
+      couponType: 'Fixed Amount',
+      status: 'Active'
+    }
+  ];
 
-  const [studentsData] = useState(generateStudents());
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sortBy, setSortBy] = useState('fullName');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortBy, setSortBy] = useState('couponName');
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchText, setSearchText] = useState('');
   const [columnVisibilityAnchor, setColumnVisibilityAnchor] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
-    courseId: true,
-    fullName: true,
-    gender: true,
-    country: true,
-    city: true,
-    phoneNo: true,
-    email: true,
-    password: true,
+    couponId: true,
+    couponName: true,
+    couponType: true,
     status: true,
     actions: true
   });
@@ -69,11 +82,10 @@ const EnrolledStudent = () => {
     setPage(0);
   };
 
-  const filteredData = studentsData.filter(student => 
-    student.courseId.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.phoneNo.includes(searchText)
+  const filteredData = couponsData.filter(coupon => 
+    coupon.couponId.toLowerCase().includes(searchText.toLowerCase()) ||
+    coupon.couponName.toLowerCase().includes(searchText.toLowerCase()) ||
+    coupon.couponType.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const handleColumnVisibilityOpen = (event) => {
@@ -101,74 +113,50 @@ const EnrolledStudent = () => {
       visible: visibleColumns.id
     },
     {
-      id: 'courseId',
-      label: 'Course ID',
+      id: 'couponId',
+      label: 'Coupon ID',
       align: 'left',
       minWidth: 120,
       sortable: true,
-      visible: visibleColumns.courseId
+      visible: visibleColumns.couponId
     },
     {
-      id: 'fullName',
-      label: 'Full Name',
-      align: 'left',
-      minWidth: 180,
-      sortable: true,
-      visible: visibleColumns.fullName
-    },
-    {
-      id: 'gender',
-      label: 'Gender',
-      align: 'left',
-      minWidth: 100,
-      sortable: true,
-      visible: visibleColumns.gender
-    },
-    {
-      id: 'country',
-      label: 'Country',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.country
-    },
-    {
-      id: 'city',
-      label: 'City',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.city
-    },
-    {
-      id: 'phoneNo',
-      label: 'Phone No',
-      align: 'left',
-      minWidth: 150,
-      sortable: true,
-      visible: visibleColumns.phoneNo
-    },
-    {
-      id: 'email',
-      label: 'Email',
+      id: 'couponName',
+      label: 'Coupon Name',
       align: 'left',
       minWidth: 200,
       sortable: true,
-      visible: visibleColumns.email
+      visible: visibleColumns.couponName
     },
     {
-      id: 'password',
-      label: 'Password',
+      id: 'couponType',
+      label: 'Coupon Type',
       align: 'left',
       minWidth: 150,
-      render: (row) => '••••••••', // Masked password
-      visible: visibleColumns.password
+      sortable: true,
+      visible: visibleColumns.couponType
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      align: 'left',
+      minWidth: 100,
+      sortable: true,
+      render: (row) => (
+        <Chip
+          label={row.status}
+          color={row.status === 'Active' ? 'success' : 'error'}
+          size="small"
+          variant="outlined"
+        />
+      ),
+      visible: visibleColumns.status
     },
     {
       id: 'actions',
       label: 'Actions',
       align: 'center',
-      minWidth: 150,
+      minWidth: 120,
       render: (row) => (
         <Box display="flex" justifyContent="center">
           <IconButton size="small" onClick={() => handleView(row)}>
@@ -201,16 +189,16 @@ const EnrolledStudent = () => {
     setSortBy(columnId);
   };
 
-  const handleView = (student) => {
-    console.log('View student:', student);
+  const handleEdit = (coupon) => {
+    console.log('Edit coupon:', coupon);
   };
 
-  const handleEdit = (student) => {
-    console.log('Edit student:', student);
+  const handleDelete = (coupon) => {
+    console.log('Delete coupon:', coupon);
   };
 
-  const handleDelete = (student) => {
-    console.log('Delete student:', student);
+  const handleView = (coupon) => {
+    console.log('View coupon:', coupon);
   };
 
   const handleExport = (type) => {
@@ -235,7 +223,7 @@ const EnrolledStudent = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4"> Enrolled Student</Typography>
+        <Typography variant="h4">All Coupons</Typography>
         <Box>
           <Button 
             variant="outlined" 
@@ -289,12 +277,12 @@ const EnrolledStudent = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Enrolled Student {filteredData.length}
+          Total Coupons {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
           size="small"
-          placeholder="Search students..."
+          placeholder="Search..."
           value={searchText}
           onChange={handleSearchChange}
           InputProps={{
@@ -319,10 +307,10 @@ const EnrolledStudent = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-         actions={false}
-      />
+        actions={false}
+      />  
     </Box>
   );
 };
 
-export default EnrolledStudent;
+export default ViewCoupons;

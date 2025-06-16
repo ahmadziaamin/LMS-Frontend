@@ -12,14 +12,13 @@ import {
   TableSortLabel,
   IconButton,
   Tooltip,
-  Chip
+  Chip,
+  Typography
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Visibility as VisibilityIcon,
-  ToggleOn as ActiveIcon,
-  ToggleOff as InactiveIcon
+  Visibility as VisibilityIcon
 } from '@mui/icons-material';
 
 const DataGrid = ({
@@ -36,20 +35,37 @@ const DataGrid = ({
   onEdit,
   onDelete,
   onView,
-  onToggleStatus,
   actions = true
 }) => {
   return (
-    <Paper elevation={3} sx={{ width: '100%', overflow: 'hidden',boxShadow:"none", }}>
+    <Paper sx={{ 
+      border: '1px solid #e0e0e0', 
+      borderRadius: '4px',
+      boxShadow: 'none',
+      overflow: 'hidden'
+    }}>
       <TableContainer>
-        <Table stickyHeader aria-label="data grid">
+        <Table stickyHeader aria-label="data grid" sx={{
+          '& .MuiTableCell-root': {
+            borderRight: '1px solid #e0e0e0',
+            '&:last-child': {
+              borderRight: 'none'
+            }
+          }
+        }}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align || 'left'}
-                  style={{ minWidth: column.minWidth }}
+                  sx={{ 
+                    minWidth: column.minWidth,
+                    backgroundColor: '#f5f5f5',
+                    fontWeight: 'bold',
+                    borderBottom: '1px solid #e0e0e0',
+                    py: 1.5
+                  }}
                 >
                   {column.sortable ? (
                     <TableSortLabel
@@ -65,7 +81,16 @@ const DataGrid = ({
                 </TableCell>
               ))}
               {actions && (
-                <TableCell align="center" style={{ minWidth: 150 }}>
+                <TableCell 
+                  align="center" 
+                  sx={{ 
+                    minWidth: 150,
+                    backgroundColor: '#f5f5f5',
+                    fontWeight: 'bold',
+                    borderBottom: '1px solid #e0e0e0',
+                    py: 1.5
+                  }}
+                >
                   Actions
                 </TableCell>
               )}
@@ -74,44 +99,62 @@ const DataGrid = ({
           <TableBody>
             {data.length > 0 ? (
               data.map((row, index) => (
-                <TableRow hover key={row.id || index}>
+                <TableRow 
+                  hover 
+                  key={row.id || index}
+                  sx={{ '&:last-child td': { borderBottom: 0 } }}
+                >
                   {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align || 'left'}>
+                    <TableCell 
+                      key={column.id} 
+                      align={column.align || 'left'}
+                      sx={{ 
+                        borderBottom: '1px solid #e0e0e0',
+                        py: 1.5
+                      }}
+                    >
                       {column.render ? column.render(row) : row[column.id]}
                     </TableCell>
                   ))}
                   {actions && (
-                    <TableCell align="center">
+                    <TableCell 
+                      align="center"
+                      sx={{ 
+                        borderBottom: '1px solid #e0e0e0',
+                        py: 1.5
+                      }}
+                    >
                       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                         {onView && (
                           <Tooltip title="View">
-                            <IconButton onClick={() => onView(row)}>
-                              <VisibilityIcon color="info" />
+                            <IconButton 
+                              size="small"
+                              onClick={() => onView(row)}
+                              sx={{ color: '#1976d2' }}
+                            >
+                              <VisibilityIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         )}
                         {onEdit && (
                           <Tooltip title="Edit">
-                            <IconButton onClick={() => onEdit(row)}>
-                              <EditIcon color="primary" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        {onToggleStatus && (
-                          <Tooltip title={row.status === 'Active' ? 'Deactivate' : 'Activate'}>
-                            <IconButton onClick={() => onToggleStatus(row)}>
-                              {row.status === 'Active' ? (
-                                <ActiveIcon color="success" />
-                              ) : (
-                                <InactiveIcon color="error" />
-                              )}
+                            <IconButton 
+                              size="small"
+                              onClick={() => onEdit(row)}
+                              sx={{ color: '#1976d2' }}
+                            >
+                              <EditIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         )}
                         {onDelete && (
                           <Tooltip title="Delete">
-                            <IconButton onClick={() => onDelete(row)}>
-                              <DeleteIcon color="error" />
+                            <IconButton 
+                              size="small"
+                              onClick={() => onDelete(row)}
+                              sx={{ color: '#d32f2f' }}
+                            >
+                              <DeleteIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         )}
@@ -122,7 +165,14 @@ const DataGrid = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
+                <TableCell 
+                  colSpan={columns.length + (actions ? 1 : 0)} 
+                  align="center"
+                  sx={{ 
+                    borderBottom: '1px solid #e0e0e0',
+                    py: 3
+                  }}
+                >
                   No data available
                 </TableCell>
               </TableRow>
@@ -131,17 +181,25 @@ const DataGrid = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[4, 10, 25]}
         component="div"
         count={totalRows}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
-        labelRowsPerPage="Rows per page:"
-        labelDisplayedRows={({ from, to, count }) =>
-          `Showing ${from} to ${to} of ${count} entries`
-        }
+        sx={{
+          borderTop: '1px solid #e0e0e0',
+          '& .MuiTablePagination-toolbar': {
+            paddingRight: 2
+          }
+        }}
+        labelRowsPerPage="Show:"
+        labelDisplayedRows={({ from, to, count }) => (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Showing {from} to {to} of {count} entries
+          </Typography>
+        )}
       />
     </Paper>
   );

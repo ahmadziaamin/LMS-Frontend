@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
+  Chip, 
   Button, 
   IconButton, 
   TextField,
   InputAdornment,
-  Chip
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import {
   FileCopy as CopyIcon,
@@ -16,50 +19,69 @@ import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
+  MoreVert as MoreVertIcon,
   Search as SearchIcon,
   ViewColumn as ViewColumnIcon
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const EnrolledStudent = () => {
-  // Generate 30 dummy student records
-  const generateStudents = () => {
-    const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
-    const cities = ['New York', 'Toronto', 'London', 'Sydney', 'Karachi', 'Mumbai', 'Dubai'];
-    const genders = ['Male', 'Female', 'Other'];
-    const statuses = ['Active', 'Pending', 'Rejected'];
-    
-    return Array.from({ length: 30 }, (_, i) => ({
-      id: i + 1,
-      courseId: `STU${1000 + i}`,
-      fullName: `Student ${i + 1}`,
-      gender: genders[Math.floor(Math.random() * genders.length)],
-      country: countries[Math.floor(Math.random() * countries.length)],
-      city: cities[Math.floor(Math.random() * cities.length)],
-      phoneNo: `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`,
-      email: `student${i + 1}@example.com`,
-      password: `pass${1000 + i}`,
-      status: statuses[Math.floor(Math.random() * statuses.length)]
-    }));
-  };
+const ViewBooks = () => {
+  const booksData = [
+    {
+      id: 1,
+      bookId: 'QQABOK1045',
+      bookName: 'The Great Gatsby',
+      bookAuthor: 'F. Scott Fitzgerald',
+      bookPrice: 12.99,
+      status: 'Active'
+    },
+    {
+      id: 2,
+      bookId: 'QQABOK1046',
+      bookName: 'To Kill a Mockingbird',
+      bookAuthor: 'Harper Lee',
+      bookPrice: 10.50,
+      status: 'Active'
+    },
+    {
+      id: 3,
+      bookId: 'QQABOK1047',
+      bookName: '1984',
+      bookAuthor: 'George Orwell',
+      bookPrice: 8.75,
+      status: 'Inactive'
+    },
+    {
+      id: 4,
+      bookId: 'QQABOK1048',
+      bookName: 'Pride and Prejudice',
+      bookAuthor: 'Jane Austen',
+      bookPrice: 9.99,
+      status: 'Active'
+    },
+    {
+      id: 5,
+      bookId: 'QQABOK1049',
+      bookName: 'The Hobbit',
+      bookAuthor: 'J.R.R. Tolkien',
+      bookPrice: 14.25,
+      status: 'Active'
+    }
+  ];
 
-  const [studentsData] = useState(generateStudents());
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sortBy, setSortBy] = useState('fullName');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortBy, setSortBy] = useState('bookName');
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchText, setSearchText] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
   const [columnVisibilityAnchor, setColumnVisibilityAnchor] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
-    courseId: true,
-    fullName: true,
-    gender: true,
-    country: true,
-    city: true,
-    phoneNo: true,
-    email: true,
-    password: true,
+    bookId: true,
+    bookName: true,
+    bookAuthor: true,
+    bookPrice: true,
     status: true,
     actions: true
   });
@@ -69,12 +91,19 @@ const EnrolledStudent = () => {
     setPage(0);
   };
 
-  const filteredData = studentsData.filter(student => 
-    student.courseId.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.phoneNo.includes(searchText)
+  const filteredData = booksData.filter(book => 
+    book.bookId.toLowerCase().includes(searchText.toLowerCase()) ||
+    book.bookName.toLowerCase().includes(searchText.toLowerCase()) ||
+    book.bookAuthor.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleColumnVisibilityOpen = (event) => {
     setColumnVisibilityAnchor(event.currentTarget);
@@ -101,74 +130,59 @@ const EnrolledStudent = () => {
       visible: visibleColumns.id
     },
     {
-      id: 'courseId',
-      label: 'Course ID',
+      id: 'bookId',
+      label: 'Book ID',
       align: 'left',
       minWidth: 120,
       sortable: true,
-      visible: visibleColumns.courseId
+      visible: visibleColumns.bookId
     },
     {
-      id: 'fullName',
-      label: 'Full Name',
-      align: 'left',
-      minWidth: 180,
-      sortable: true,
-      visible: visibleColumns.fullName
-    },
-    {
-      id: 'gender',
-      label: 'Gender',
-      align: 'left',
-      minWidth: 100,
-      sortable: true,
-      visible: visibleColumns.gender
-    },
-    {
-      id: 'country',
-      label: 'Country',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.country
-    },
-    {
-      id: 'city',
-      label: 'City',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.city
-    },
-    {
-      id: 'phoneNo',
-      label: 'Phone No',
-      align: 'left',
-      minWidth: 150,
-      sortable: true,
-      visible: visibleColumns.phoneNo
-    },
-    {
-      id: 'email',
-      label: 'Email',
+      id: 'bookName',
+      label: 'Book Name',
       align: 'left',
       minWidth: 200,
       sortable: true,
-      visible: visibleColumns.email
+      visible: visibleColumns.bookName
     },
     {
-      id: 'password',
-      label: 'Password',
+      id: 'bookAuthor',
+      label: 'Book Author',
       align: 'left',
       minWidth: 150,
-      render: (row) => '••••••••', // Masked password
-      visible: visibleColumns.password
+      sortable: true,
+      visible: visibleColumns.bookAuthor
+    },
+    {
+      id: 'bookPrice',
+      label: 'Book Price',
+      align: 'left',
+      minWidth: 100,
+      sortable: true,
+      render: (row) => `$${row.bookPrice.toFixed(2)}`,
+      visible: visibleColumns.bookPrice
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      align: 'left',
+      minWidth: 100,
+      sortable: true,
+      render: (row) => (
+        <Chip
+          label={row.status}
+          color={row.status === 'Active' ? 'success' : 'error'}
+          size="small"
+          variant="outlined"
+        />
+      ),
+      visible: visibleColumns.status
     },
     {
       id: 'actions',
       label: 'Actions',
       align: 'center',
-      minWidth: 150,
+      minWidth: 120,
       render: (row) => (
         <Box display="flex" justifyContent="center">
           <IconButton size="small" onClick={() => handleView(row)}>
@@ -201,20 +215,21 @@ const EnrolledStudent = () => {
     setSortBy(columnId);
   };
 
-  const handleView = (student) => {
-    console.log('View student:', student);
+  const handleEdit = (book) => {
+    console.log('Edit book:', book);
   };
 
-  const handleEdit = (student) => {
-    console.log('Edit student:', student);
+  const handleDelete = (book) => {
+    console.log('Delete book:', book);
   };
 
-  const handleDelete = (student) => {
-    console.log('Delete student:', student);
+  const handleView = (book) => {
+    console.log('View book:', book);
   };
 
   const handleExport = (type) => {
     console.log(`Export as ${type}`);
+    handleMenuClose();
   };
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -235,7 +250,7 @@ const EnrolledStudent = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4"> Enrolled Student</Typography>
+        <Typography variant="h4">All Books</Typography>
         <Box>
           <Button 
             variant="outlined" 
@@ -289,12 +304,12 @@ const EnrolledStudent = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Enrolled Student {filteredData.length}
+          Total Books {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
           size="small"
-          placeholder="Search students..."
+          placeholder="Search..."
           value={searchText}
           onChange={handleSearchChange}
           InputProps={{
@@ -319,10 +334,36 @@ const EnrolledStudent = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-         actions={false}
+        actions={false}
       />
+
+      {/* Column Visibility Menu */}
+      <Menu
+        anchorEl={columnVisibilityAnchor}
+        open={Boolean(columnVisibilityAnchor)}
+        onClose={handleColumnVisibilityClose}
+      >
+        {Object.keys(visibleColumns).map((columnId) => (
+          <MenuItem key={columnId} onClick={() => toggleColumnVisibility(columnId)}>
+            <Box display="flex" alignItems="center">
+              {visibleColumns[columnId] ? (
+                <Box sx={{ width: 24, height: 24, mr: 1 }}>✓</Box>
+              ) : (
+                <Box sx={{ width: 24, height: 24, mr: 1 }} />
+              )}
+              {columnId === 'id' && 'Sr. No'}
+              {columnId === 'bookId' && 'Book ID'}
+              {columnId === 'bookName' && 'Book Name'}
+              {columnId === 'bookAuthor' && 'Book Author'}
+              {columnId === 'bookPrice' && 'Book Price'}
+              {columnId === 'status' && 'Status'}
+              {columnId === 'actions' && 'Actions'}
+            </Box>
+          </MenuItem>
+        ))}
+      </Menu>
     </Box>
   );
 };
 
-export default EnrolledStudent;
+export default ViewBooks;

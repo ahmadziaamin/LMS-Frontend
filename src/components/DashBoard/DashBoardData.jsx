@@ -1,101 +1,172 @@
+// src/components/DashBoard/DashBoardData.js
 export const dashboardData = [
-    {
-      id: 1,
-      title: "Enroll Students",
-      count: 0,
-      color: "#00BCD4",
-      route: "/students/enroll",
-    },
-    {
-      id: 2,
-      title: "Assign Students",
-      count: 36,
-      color: "#607D8B",
-      route: "/students/assign",
-    },
-    {
-      id: 3,
-      title: "Payment Status",
-      count: 59,
-      color: "#F44336",
-      route: "/payments/status",
-    },
-    {
-      id: 4,
-      title: "Paypal Payment",
-      count: "$5817.85",
-      color: "#4CAF50",
-      route: "/payments/paypal",
-    },
-    {
-      id: 5,
-      title: "Student Signup",
-      count: 74,
-      color: "#9E9E9E",
-      route: "/students/signup",
-    },
-    {
-      id: 6,
-      title: "Teacher Signup",
-      count: 25,
-      color: "#2196F3",
-      route: "/teachers/signup",
-    },
-    {
-      id: 7,
-      title: "New Trials",
-      count: 4,
-      color: "#F44336",
-      route: "/trials/new",
-    },
-    {
-      id: 8,
-      title: "Assign Trials",
-      count: 1,
-      color: "#2196F3",
-      route: "/trials/assign",
-    },
-    {
-      id: 9,
-      title: "Career Requests",
-      count: 1,
-      color: "#4CAF50",
-      route: "/career/requests",
-    },
-    {
-      id: 10,
-      title: "Promote Students",
-      count: 1,
-      color: "#4CAF50",
-      route: "/students/promote",
-    },
-    {
-      id: 11,
-      title: "Refer a Friend",
-      count: 5,
-      color: "#9E9E9E",
-      route: "/referral",
-    },
-    {
-      id: 12,
-      title: "Send Receipt",
-      count: 11,
-      color: "#4CAF50",
-      route: "/payments/send-receipt",
-    },
-    {
-      id: 13,
-      title: "Student Leave Form",
-      count: 11,
-      color: "#F44336",
-      route: "/students/leave-form",
-    },
-    {
-      id: 14,
-      title: "Student Feedback Form",
-      count: 1,
-      color: "#2196F3",
-      route: "/students/feedback",
-    },
-  ];
-  
+  {
+    id: 1,
+    title: "Profile",
+    count: "Admin",
+    subtitle: "OQM2MN007",
+    route: "/profile/view",
+    emoji: "😊",
+    color: "#2196F3"
+  },
+  {
+    id: 2,
+    title: "Paypal Payment",
+    count: "5",
+    route: "/payment/payment-status",
+    emoji: "🌢",
+    color: "#4CAF50"
+  },
+  {
+    id: 3,
+    title: "New Title",
+    count: "4",
+    route: "/student/assigned-student",
+    emoji: "🌢",
+    color: "#FF9800"
+  },
+  {
+    id: 4,
+    title: "Refer a friend",
+    count: "5",
+    route: "/profile/view",
+    emoji: "🌢",
+    color: "#9C27B0"
+  },
+  {
+    id: 5,
+    title: "Student Quit form",
+    count: "1",
+    route: "/student/ex-student",
+    emoji: "🌢",
+    color: "#F44336"
+  },
+  {
+    id: 6,
+    title: "CONDIGLUS",
+    count: "9",
+    route: "/dashboard",
+    emoji: "🌢",
+    color: "#607D8B"
+  },
+  {
+    id: 7,
+    title: "Equal Students",
+    count: "0",
+    route: "/student/enrolled-student",
+    emoji: "🌢",
+    color: "#00BCD4"
+  },
+  {
+    id: 8,
+    title: "Manual Payments",
+    count: "5:5817.85",
+    route: "/payment/manual-payments",
+    emoji: "🌢",
+    color: "#8BC34A"
+  },
+  {
+    id: 9,
+    title: "Assign Trials",
+    count: "1",
+    route: "/student/assigned-student",
+    emoji: "🌢",
+    color: "#FF5722"
+  },
+  {
+    id: 10,
+    title: "Send Receipt",
+    count: "11",
+    route: "/fee-receipt/send-receipt",
+    emoji: "🌢",
+    color: "#795548"
+  },
+  {
+    id: 11,
+    title: "Teacher Leave form",
+    count: "4",
+    route: "/teacher/ex-teacher",
+    emoji: "🌢",
+    color: "#3F51B5"
+  },
+  {
+    id: 12,
+    title: "Assign Students",
+    count: "3G",
+    route: "/student/assigned-student",
+    emoji: "🌢",
+    color: "#009688"
+  },
+  {
+    id: 13,
+    title: "Student Signup",
+    count: "74",
+    route: "/signup/student-request",
+    emoji: "🌢",
+    color: "#E91E63"
+  },
+  {
+    id: 14,
+    title: "Career Requests",
+    count: "1",
+    route: "/teacher/career-request",
+    emoji: "🌢",
+    color: "#CDDC39"
+  },
+  {
+    id: 15,
+    title: "Student Leave Form",
+    count: "11",
+    route: "/student/ex-student",
+    emoji: "🌢",
+    color: "#673AB7"
+  },
+  {
+    id: 16,
+    title: "Teacher Feedback Form",
+    count: "4",
+    route: "/teacher/favourite-teacher",
+    emoji: "🌢",
+    color: "#FFC107"
+  },
+  {
+    id: 17,
+    title: "Payment Status",
+    count: "61",
+    route: "/payment/payment-status",
+    emoji: "🌢",
+    color: "#9E9E9E"
+  },
+  {
+    id: 18,
+    title: "Teacher Signup",
+    count: "25",
+    route: "/signup/teacher-request",
+    emoji: "🌢",
+    color: "#00BCD4"
+  },
+  {
+    id: 19,
+    title: "Promote Students",
+    count: "1",
+    route: "/promote-Students/promote-request",
+    emoji: "🌢",
+    color: "#8BC34A"
+  },
+  {
+    id: 20,
+    title: "Student Feedback Form",
+    count: "1",
+    route: "/student/enrolled-student",
+    emoji: "🌢",
+    color: "#FF9800"
+  },
+  {
+    id: 21,
+    title: "Teacher Quit Form",
+    count: "1",
+    route: "/teacher/ex-teacher",
+    emoji: "🌢",
+    color: "#F44336"
+  }
+];

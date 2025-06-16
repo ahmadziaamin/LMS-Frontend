@@ -21,7 +21,7 @@ import {
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const EnrolledStudent = () => {
+const PromoRequest = () => {
   // Generate 30 dummy student records
   const generateStudents = () => {
     const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
@@ -164,6 +164,7 @@ const EnrolledStudent = () => {
       render: (row) => '••••••••', // Masked password
       visible: visibleColumns.password
     },
+  
     {
       id: 'actions',
       label: 'Actions',
@@ -235,7 +236,7 @@ const EnrolledStudent = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4"> Enrolled Student</Typography>
+        <Typography variant="h4">Student Requests</Typography>
         <Box>
           <Button 
             variant="outlined" 
@@ -289,7 +290,7 @@ const EnrolledStudent = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Enrolled Student {filteredData.length}
+          Total Students {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
@@ -319,10 +320,10 @@ const EnrolledStudent = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-         actions={false}
+       actions={false}
       />
     </Box>
   );
 };
 
-export default EnrolledStudent;
+export default PromoRequest;

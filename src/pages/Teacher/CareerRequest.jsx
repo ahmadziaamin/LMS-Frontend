@@ -1,52 +1,95 @@
 import React, { useState } from 'react';
-import { Box, Typography, Chip } from '@mui/material';
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  IconButton, 
+  TextField,
+  InputAdornment,
+  Chip
+} from '@mui/material';
+import {
+  FileCopy as CopyIcon,
+  PictureAsPdf as PdfIcon,
+  Print as PrintIcon,
+  GridOn as ExcelIcon,
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+  ViewColumn as ViewColumnIcon
+} from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
 const CareerRequest = () => {
-  const coursesData = [
-    {
-      id: 1,
-      courseId: 'OQACSR1004',
-      name: 'Hifz e Quran with Tajweed',
-      category: 'Level IV',
-      duration: '1',
-      teacher: 'Usman Mehboob',
-      status: 'Deactive'
-    },
-    {
-      id: 2,
-      courseId: 'OQACSR1003',
-      name: 'Learn Quran with Tajweed',
-      category: 'Level-III',
-      duration: '1',
-      teacher: 'Muhammad Junaid',
-      status: 'Active'
-    },
-    {
-      id: 3,
-      courseId: 'OQACSR1002',
-      name: 'Learn Recitation of Quran',
-      category: 'Level-II',
-      duration: '1',
-      teacher: 'Abdur Rehman',
-      status: 'Active'
-    },
-    {
-      id: 4,
-      courseId: 'OQACSR1001',
-      name: 'Learn Quranic Studies for beginner',
-      category: 'Level-I',
-      duration: '1',
-      teacher: 'Haifz Muhammad Usman',
-      status: 'Active'
-    }
-  ];
+  // Generate 30 dummy student records
+  const generateStudents = () => {
+    const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
+    const cities = ['New York', 'Toronto', 'London', 'Sydney', 'Karachi', 'Mumbai', 'Dubai'];
+    const genders = ['Male', 'Female', 'Other'];
+    const statuses = ['Active', 'Pending', 'Rejected'];
+    
+    return Array.from({ length: 30 }, (_, i) => ({
+      id: i + 1,
+      courseId: `STU${1000 + i}`,
+      fullName: `Student ${i + 1}`,
+      gender: genders[Math.floor(Math.random() * genders.length)],
+      country: countries[Math.floor(Math.random() * countries.length)],
+      city: cities[Math.floor(Math.random() * cities.length)],
+      phoneNo: `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`,
+      email: `student${i + 1}@example.com`,
+      password: `pass${1000 + i}`,
+      status: statuses[Math.floor(Math.random() * statuses.length)]
+    }));
+  };
 
+  const [studentsData] = useState(generateStudents());
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [sortBy, setSortBy] = useState('name');
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortBy, setSortBy] = useState('fullName');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [searchText, setSearchText] = useState('');
+  const [columnVisibilityAnchor, setColumnVisibilityAnchor] = useState(null);
+  const [visibleColumns, setVisibleColumns] = useState({
+    id: true,
+    courseId: true,
+    fullName: true,
+    gender: true,
+    country: true,
+    city: true,
+    phoneNo: true,
+    email: true,
+    password: true,
+    status: true,
+    actions: true
+  });
 
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+    setPage(0);
+  };
+
+  const filteredData = studentsData.filter(student => 
+    student.courseId.toLowerCase().includes(searchText.toLowerCase()) ||
+    student.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+    student.email.toLowerCase().includes(searchText.toLowerCase()) ||
+    student.phoneNo.includes(searchText)
+  );
+
+  const handleColumnVisibilityOpen = (event) => {
+    setColumnVisibilityAnchor(event.currentTarget);
+  };
+
+  const handleColumnVisibilityClose = () => {
+    setColumnVisibilityAnchor(null);
+  };
+
+  const toggleColumnVisibility = (columnId) => {
+    setVisibleColumns(prev => ({
+      ...prev,
+      [columnId]: !prev[columnId]
+    }));
+  };
 
   const columns = [
     {
@@ -54,59 +97,94 @@ const CareerRequest = () => {
       label: 'Sr. No',
       align: 'left',
       minWidth: 80,
-      render: (row) => `${row.id}.`
+      render: (row) => `${row.id}.`,
+      visible: visibleColumns.id
     },
     {
       id: 'courseId',
       label: 'Course ID',
       align: 'left',
       minWidth: 120,
-      sortable: true
+      sortable: true,
+      visible: visibleColumns.courseId
     },
     {
-      id: 'name',
-      label: 'Course Name',
+      id: 'fullName',
+      label: 'Full Name',
       align: 'left',
-      minWidth: 200,
-      sortable: true
+      minWidth: 180,
+      sortable: true,
+      visible: visibleColumns.fullName
     },
     {
-      id: 'category',
-      label: 'Category',
-      align: 'left',
-      minWidth: 100,
-      sortable: true
-    },
-    {
-      id: 'duration',
-      label: 'Duration',
-      align: 'left',
-      minWidth: 80,
-      render: (row) => `${row.duration} year`
-    },
-    {
-      id: 'teacher',
-      label: 'Assign Teachers',
-      align: 'left',
-      minWidth: 150,
-      sortable: true
-    },
-    {
-      id: 'status',
-      label: 'Status(Live)',
+      id: 'gender',
+      label: 'Gender',
       align: 'left',
       minWidth: 100,
       sortable: true,
+      visible: visibleColumns.gender
+    },
+    {
+      id: 'country',
+      label: 'Country',
+      align: 'left',
+      minWidth: 120,
+      sortable: true,
+      visible: visibleColumns.country
+    },
+    {
+      id: 'city',
+      label: 'City',
+      align: 'left',
+      minWidth: 120,
+      sortable: true,
+      visible: visibleColumns.city
+    },
+    {
+      id: 'phoneNo',
+      label: 'Phone No',
+      align: 'left',
+      minWidth: 150,
+      sortable: true,
+      visible: visibleColumns.phoneNo
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      align: 'left',
+      minWidth: 200,
+      sortable: true,
+      visible: visibleColumns.email
+    },
+    {
+      id: 'password',
+      label: 'Password',
+      align: 'left',
+      minWidth: 150,
+      render: (row) => '••••••••', // Masked password
+      visible: visibleColumns.password
+    },
+    {
+      id: 'actions',
+      label: 'Actions',
+      align: 'center',
+      minWidth: 150,
       render: (row) => (
-        <Chip
-          label={row.status}
-          color={row.status === 'Active' ? 'success' : 'error'}
-          size="small"
-        />
-      )
+        <Box display="flex" justifyContent="center">
+          <IconButton size="small" onClick={() => handleView(row)}>
+            <VisibilityIcon fontSize="small" />
+          </IconButton>
+          <IconButton size="small" onClick={() => handleEdit(row)}>
+            <EditIcon fontSize="small" />
+          </IconButton>
+          <IconButton size="small" onClick={() => handleDelete(row)}>
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      ),
+      visible: visibleColumns.actions
     }
-  ];
-
+  ].filter(column => column.visible);
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -116,33 +194,30 @@ const CareerRequest = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   const handleSort = (columnId) => {
     const isAsc = sortBy === columnId && sortDirection === 'asc';
     setSortDirection(isAsc ? 'desc' : 'asc');
     setSortBy(columnId);
   };
 
-
-  const handleEdit = (course) => {
-    console.log('Edit course:', course);
-  
+  const handleView = (student) => {
+    console.log('View student:', student);
   };
 
-  const handleDelete = (course) => {
-    console.log('Delete course:', course);
+  const handleEdit = (student) => {
+    console.log('Edit student:', student);
   };
 
-  const handleView = (course) => {
-    console.log('View course:', course);
-
+  const handleDelete = (student) => {
+    console.log('Delete student:', student);
   };
 
-  const handleToggleStatus = (course) => {
-    console.log('Toggle status for course:', course);
-
+  const handleExport = (type) => {
+    console.log(`Export as ${type}`);
   };
 
-  const sortedData = [...coursesData].sort((a, b) => {
+  const sortedData = [...filteredData].sort((a, b) => {
     if (a[sortBy] < b[sortBy]) {
       return sortDirection === 'asc' ? -1 : 1;
     }
@@ -152,7 +227,6 @@ const CareerRequest = () => {
     return 0;
   });
 
-  // Paginate data
   const paginatedData = sortedData.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -160,24 +234,92 @@ const CareerRequest = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-  Career Requests
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">Career Requests</Typography>
+        <Box>
+          <Button 
+            variant="outlined" 
+            startIcon={<CopyIcon />} 
+            onClick={() => handleExport('copy')} 
+            sx={{ mr: 1 }}
+          >
+            Copy
+          </Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<ExcelIcon />} 
+            onClick={() => handleExport('csv')} 
+            sx={{ mr: 1 }}
+          >
+            CSV
+          </Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<ExcelIcon />} 
+            onClick={() => handleExport('excel')} 
+            sx={{ mr: 1 }}
+          >
+            Excel
+          </Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<PdfIcon />} 
+            onClick={() => handleExport('pdf')} 
+            sx={{ mr: 1 }}
+          >
+            PDF
+          </Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<PrintIcon />} 
+            onClick={() => handleExport('print')}
+            sx={{ mr: 1 }}
+          >
+            Print
+          </Button>
+          <Button 
+            variant="outlined" 
+            startIcon={<ViewColumnIcon />} 
+            onClick={handleColumnVisibilityOpen}
+          >
+            Column visibility
+          </Button>
+        </Box>
+      </Box>
+      
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="subtitle1">
+          Total Students {filteredData.length}
+        </Typography>
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Search students..."
+          value={searchText}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ width: 300 }}
+        />
+      </Box>
+      
       <DataGrid
         columns={columns}
         data={paginatedData}
         page={page}
         rowsPerPage={rowsPerPage}
-        totalRows={coursesData.length}
+        totalRows={filteredData.length}
         sortBy={sortBy}
         sortDirection={sortDirection}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onView={handleView}
-        onToggleStatus={handleToggleStatus}
+         actions={false}
       />
     </Box>
   );

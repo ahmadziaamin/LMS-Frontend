@@ -21,7 +21,7 @@ import {
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const EnrolledStudent = () => {
+const PendingPayment = () => {
   // Generate 30 dummy student records
   const generateStudents = () => {
     const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
@@ -235,7 +235,7 @@ const EnrolledStudent = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4"> Enrolled Student</Typography>
+        <Typography variant="h4">Pending Payment</Typography>
         <Box>
           <Button 
             variant="outlined" 
@@ -289,7 +289,7 @@ const EnrolledStudent = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Enrolled Student {filteredData.length}
+          Total Paymet {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
@@ -325,4 +325,4 @@ const EnrolledStudent = () => {
   );
 };
 
-export default EnrolledStudent;
+export default PendingPayment;

@@ -1,30 +1,80 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Divider, Collapse, Typography,
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Divider,
+  Collapse,
+  Typography,
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
-  School as SchoolIcon,
   AccountCircle as AccountCircleIcon,
   ExpandLess,
   ExpandMore,
   List as ListIcon,
-  Logout as LogoutIcon,
+  MenuBook as MenuBookIcon,
+  PersonAdd as PersonAddIcon,
+  Group as GroupIcon,
+  People as PeopleIcon,
+  Upgrade as UpgradeIcon,
+  LocalLibrary as LocalLibraryIcon,
+  CardGiftcard as CardGiftcardIcon,
+  VideoCall as VideoCallIcon,
+  ReceiptLong as ReceiptLongIcon,
+  Payment as PaymentIcon,
 } from "@mui/icons-material";
-import SidebarItem from "./SidebarItem";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/logo128.png";
-import { useNavigate, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
+const SidebarItem = ({ icon, label, to, external, onClick, sx, collapsed, alwaysHighlight }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+    <ListItemButton
+      component={external ? "a" : Link}
+      href={external ? to : undefined}
+      to={external ? undefined : to}
+      onClick={onClick}
+      target={external ? "_blank" : undefined}
+      sx={{
+        ...sx,
+        px: collapsed ? "0px !important" : "8px !important",
+        bgcolor: alwaysHighlight ? "#4c49a3" : (isActive ? "#f8fdf8" : "inherit"),
+        margin:isActive ? "5px 0px":"0px",
+        borderRadius:"5px",
+        color: alwaysHighlight ? "white" : (isActive ? "black" : "inherit"),
+        "& .MuiListItemIcon-root": {
+          color: alwaysHighlight ? "white" : (isActive ? "black" : "inherit"),
+          minWidth: collapsed ? "0px" : "36px",
+          justifyContent: "center",
+        },
+        "&:hover": {
+          bgcolor: alwaysHighlight ? "#4c49a3" : (isActive ? "#f8fdf8" : "#495057"),
+          color: alwaysHighlight ? "white" : (isActive ? "black" : "white"),
+        },
+      }}
+    >
+      <ListItemIcon>{icon}</ListItemIcon>
+      {!collapsed && <ListItemText primary={label} />}
+    </ListItemButton>
+  );
+};
+
+const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleCollapse }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const container = window !== undefined ? () => window().document.body : undefined;
 
   const [openMenuKey, setOpenMenuKey] = useState(null);
 
-  // Auto-open based on route
   useEffect(() => {
     const path = location.pathname;
     if (path.startsWith("/profile")) setOpenMenuKey("profile");
@@ -39,17 +89,12 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
     setOpenMenuKey((prevKey) => (prevKey === key ? null : key));
   };
 
-  const handleLogoutClick = () => {
-    if (onLogout) onLogout();
-    navigate("/auth/login");
-  };
-
   const menus = [
     {
       label: "Dashboard",
       icon: <DashboardIcon />,
       to: "/dashboard",
-      sx: { bgcolor: "#007bff", color: "white" },
+      alwaysHighlight: true
     },
     {
       label: "Profile",
@@ -62,17 +107,21 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
     },
     {
       label: "Courses",
-      icon: <SchoolIcon />,
+      icon: <MenuBookIcon />,
       key: "courses",
       children: [
         { label: "View Courses", to: "/courses" },
         { label: "Add Course", to: "/courses/add" },
-        { label: "Curriculum", to: "https://quranacademy.live/index.php", external: true },
+        {
+          label: "Curriculum",
+          to: "https://quranacademy.live/index.php",
+          external: true,
+        },
       ],
     },
     {
       label: "Signup",
-      icon: <SchoolIcon />,
+      icon: <PersonAddIcon />,
       key: "signup",
       children: [
         { label: "Student Request", to: "/signup/student-request" },
@@ -81,7 +130,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
     },
     {
       label: "Students",
-      icon: <SchoolIcon />,
+      icon: <GroupIcon />,
       key: "student",
       children: [
         { label: "Assigned Student", to: "/student/assigned-student" },
@@ -91,7 +140,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
     },
     {
       label: "Teachers",
-      icon: <SchoolIcon />,
+      icon: <PeopleIcon />,
       key: "teacher",
       children: [
         { label: "Career Request", to: "/teacher/career-request" },
@@ -99,15 +148,81 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
         { label: "Ex Teacher", to: "/teacher/ex-teacher" },
       ],
     },
+    {
+      label: "Promote Students",
+      icon: <UpgradeIcon />,
+      key: "promote students",
+      children: [
+        { label: "Promote Request", to: "/promote-Students/promote-request" },
+      ],
+    },
+    {
+      label: "Libaray",
+      icon: <LocalLibraryIcon />,
+      key: "libaray",
+      children: [
+        { label: "Add Books", to: "/library/add-books" },
+        { label: "View Books", to: "/library/view-books" },
+        { label: "Upload Books", to: "/library/upload-books" },
+      ],
+    },
+    {
+      label: "Coupan",
+      icon: <CardGiftcardIcon />,
+      key: "coupan",
+      children: [
+        { label: "Create Coupon", to: "/coupan/create-coupon" },
+        { label: "View Coupons", to: "/coupan/view-coupon" },
+      ],
+    },
+    {
+      label: "Zoom",
+      icon: <VideoCallIcon />,
+      key: "zoom",
+      children: [{ label: "Create Zoom Link", to: "/zoom/create-zoom-link" }],
+    },
+    {
+      label: "Fee Receipt",
+      icon: <ReceiptLongIcon />,
+      key: "fee receipt",
+      children: [{ label: "Send Receipt", to: "/fee-receipt/send-receipt" }],
+    },
+    {
+      label: "Payment",
+      icon: <PaymentIcon />,
+      key: "payment",
+      children: [
+        { label: "Payment Status", to: "/payment/payment-status" },
+        { label: "Received Payments", to: "/payment/received-payments" },
+        { label: "Pending Payments", to: "/payment/pending-payments" },
+      ],
+    },
   ];
 
   const drawerContent = (
-    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: "#343a40", color: "#c2c7d0", px: 2 }}>
-      <Toolbar sx={{ display: "flex", alignItems: "center", mb: 2, px: 0 }}>
-        <Typography variant="h6" noWrap sx={{ display: "flex", alignItems: "center" }}>
-          <img src={logo} style={{ width: "40px", height: "40px", marginRight: "10px" }} alt="logo" />
-          OQA Admin
-        </Typography>
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        bgcolor: "#343a40",
+        color: "#c2c7d0",
+        px: collapsed ? 0 : 0.5,
+      }}
+    >
+      <Toolbar sx={{ display: "flex", alignItems: "center", mb: 2, px:  "9px !important"  }}>
+        {collapsed ? (
+          <img src={logo} style={{ width: "40px", height: "40px" }} alt="logo" />
+        ) : (
+          <Typography variant="h6" noWrap sx={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={logo}
+              style={{ width: "40px", height: "40px", marginRight: "10px" }}
+              alt="logo"
+            />
+            OQA Admin
+          </Typography>
+        )}
       </Toolbar>
       <Divider />
       <List component="nav" disablePadding>
@@ -120,14 +235,29 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
                   onClick={() => toggleMenu(item.key)}
                   sx={{
                     bgcolor: isOpen ? "rgba(255, 255, 255, .1)" : "inherit",
+                    px: collapsed ? "8px !important" : "10px !important",
                     color: isOpen ? "#fff" : "inherit",
-                    "& .MuiListItemIcon-root": { color: isOpen ? "#fff" : "inherit" },
-                    "&:hover": { bgcolor: isOpen ? "rgba(255, 255, 255, .1)" : "#495057", color: "white" },
+                    justifyContent:"center",
+                    margin:"5px 0px", 
+                    "& .MuiListItemIcon-root": {
+                      color: isOpen ? "#fff" : "inherit",
+                      minWidth: collapsed ? "0px" : "20px",
+                      pr: collapsed ? "0px" : "10px",
+                      justifyContent: "center",
+                    },
+                    "&:hover": {
+                      bgcolor: isOpen ? "rgba(255, 255, 255, .1)" : "#495057",
+                      color: "white",
+                    },
                   }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.label} />
-                  {isOpen ? <ExpandLess /> : <ExpandMore />}
+                  {!collapsed && (
+                    <>
+                      <ListItemText primary={item.label} />
+                      {isOpen ? <ExpandLess /> : <ExpandMore />}
+                    </>
+                  )}
                 </ListItemButton>
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
@@ -141,7 +271,8 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
                         onClick={() => {
                           if (mobileOpen) handleDrawerToggle();
                         }}
-                        sx={{ pl: 4 }}
+                        sx={{ pl: 4, py: 0.2 }}
+                        collapsed={collapsed}
                       />
                     ))}
                   </List>
@@ -155,25 +286,16 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
                 icon={item.icon}
                 label={item.label}
                 to={item.to}
-                sx={item.sx}
+                alwaysHighlight={item.alwaysHighlight}
                 onClick={() => {
                   if (mobileOpen) handleDrawerToggle();
                 }}
+                collapsed={collapsed}
               />
             );
           }
         })}
       </List>
-      <Box sx={{ flexGrow: 1 }} />
-      <Divider />
-      <Box sx={{ p: 2 }}>
-        <ListItemButton onClick={handleLogoutClick}>
-          <ListItemIcon sx={{ color: "inherit" }}>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItemButton>
-      </Box>
     </Box>
   );
 
@@ -187,7 +309,12 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
         ModalProps={{ keepMounted: true }}
         sx={{
           display: { xs: "block", sm: "none" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, bgcolor: "#343a40", color: "#c2c7d0" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+            bgcolor: "#343a40",
+            color: "#c2c7d0",
+          },
         }}
       >
         {drawerContent}
@@ -197,7 +324,14 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, onLogout }) => {
         variant="permanent"
         sx={{
           display: { xs: "none", sm: "block" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, bgcolor: "#343a40", color: "#c2c7d0" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: collapsed ? 64 : drawerWidth,
+            bgcolor: "#343a40",
+            color: "#c2c7d0",
+            transition: "width 0.3s ease",
+            overflowX: "hidden",
+          },
         }}
         open
       >
