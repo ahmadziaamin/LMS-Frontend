@@ -170,3 +170,47 @@ export const dashboardData = [
     color: "#F44336"
   }
 ];
+
+
+
+
+// src/components/DashBoard/DashBoardData.js
+export const teacherdashboardData = [
+  {
+    id: 1,
+    title: "Profile",
+    count: "Admin",
+    subtitle: "OQM2MN007",
+    route: "/profile/view",
+    emoji: "😊",
+    color: "#2196F3"
+  },
+
+  {
+    id: 3,
+    title: "New Title",
+    count: "4",
+    route: "/student/assigned-student",
+    emoji: "🌢",
+    color: "#FF9800"
+  },
+ 
+  {
+    id: 6,
+    title: "CONDIGLUS",
+    count: "9",
+    route: "/dashboard",
+    emoji: "🌢",
+    color: "#607D8B"
+  },
+
+  {
+    id: 19,
+    title: "Promote Students",
+    count: "1",
+    route: "/promote-Students/promote-request",
+    emoji: "🌢",
+    color: "#8BC34A"
+  },
+ 
+];

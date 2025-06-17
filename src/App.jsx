@@ -47,6 +47,7 @@ import CreateLinks from "./pages/Zoom/CreateLinks";
 import FeeReceipt from "./pages/FeeReceipt/FeeReceipt";
 
 import "./App.css";
+import TeacherDashboard from "./pages/TeacherDashboard";
 
 const drawerWidth = 240;
 const collapsedWidth = 64;
@@ -59,6 +60,7 @@ function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [userType, setUserType] = useState('admin');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -68,12 +70,14 @@ function App() {
     setCollapsed(!collapsed);
   };
 
-  const handleLogin = () => {
+ const handleLogin = (email) => {  
     setLoggedIn(true);
+    setUserType(email === 'test@teacher.com' ? 'teacher' : 'admin');
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
+    setUserType('admin'); 
   };
 
   return (
@@ -89,6 +93,7 @@ function App() {
             drawerWidth={drawerWidth}
             collapsed={collapsed}
             toggleCollapse={toggleCollapse}
+             userType={userType} 
           />
         )}
 
@@ -133,7 +138,8 @@ function App() {
               path="/dashboard"
               element={
                 <PrivateRoute loggedIn={loggedIn}>
-                  <Dashboard />
+                  {userType == "admin" ?<Dashboard />:  <TeacherDashboard /> }
+                
                 </PrivateRoute>
               }
             />

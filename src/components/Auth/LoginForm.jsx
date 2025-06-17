@@ -40,7 +40,7 @@ const LoginForm = ({ onLogin }) => {
     }
 
     // Simulate login
-    onLogin();
+     onLogin(email); // <-- Add
     navigate('/dashboard');
   };
 

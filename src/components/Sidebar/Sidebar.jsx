@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
+  Box,  
   Drawer,
   List,
   ListItemButton,
@@ -37,19 +37,49 @@ const SidebarItem = ({ icon, label, to, external, onClick, sx, collapsed, always
   const location = useLocation();
   const isActive = location.pathname === to;
 
+  if (external) {
+    return (
+      <ListItemButton
+        component="a"
+        href={to}
+        onClick={onClick}
+        target="_blank"
+        rel="noopener noreferrer"
+        sx={{
+          ...sx,
+          px: collapsed ? "0px !important" : "8px !important",
+          bgcolor: alwaysHighlight ? "#4c49a3" : "inherit",
+          margin: "5px 0px",
+          borderRadius: "5px",
+          color: alwaysHighlight ? "white" : "inherit",
+          "& .MuiListItemIcon-root": {
+            color: alwaysHighlight ? "white" : "inherit",
+            minWidth: collapsed ? "0px" : "36px",
+            justifyContent: "center",
+          },
+          "&:hover": {
+            bgcolor: alwaysHighlight ? "#4c49a3" : "#495057",
+            color: alwaysHighlight ? "white" : "white",
+          },
+        }}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        {!collapsed && <ListItemText primary={label} />}
+      </ListItemButton>
+    );
+  }
+
   return (
     <ListItemButton
-      component={external ? "a" : Link}
-      href={external ? to : undefined}
-      to={external ? undefined : to}
+      component={Link}
+      to={to}
       onClick={onClick}
-      target={external ? "_blank" : undefined}
       sx={{
         ...sx,
         px: collapsed ? "0px !important" : "8px !important",
         bgcolor: alwaysHighlight ? "#4c49a3" : (isActive ? "#f8fdf8" : "inherit"),
-        margin:isActive ? "5px 0px":"0px",
-        borderRadius:"5px",
+        margin: isActive ? "5px 0px" : "0px",
+        borderRadius: "5px",
         color: alwaysHighlight ? "white" : (isActive ? "black" : "inherit"),
         "& .MuiListItemIcon-root": {
           color: alwaysHighlight ? "white" : (isActive ? "black" : "inherit"),
@@ -68,7 +98,7 @@ const SidebarItem = ({ icon, label, to, external, onClick, sx, collapsed, always
   );
 };
 
-const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleCollapse }) => {
+const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleCollapse, userType }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -82,6 +112,12 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
     else if (path.startsWith("/signup")) setOpenMenuKey("signup");
     else if (path.startsWith("/student")) setOpenMenuKey("student");
     else if (path.startsWith("/teacher")) setOpenMenuKey("teacher");
+    else if (path.startsWith("/promote-Students")) setOpenMenuKey("promote students");
+    else if (path.startsWith("/library")) setOpenMenuKey("libaray");
+    else if (path.startsWith("/coupan")) setOpenMenuKey("coupan");
+    else if (path.startsWith("/zoom")) setOpenMenuKey("zoom");
+    else if (path.startsWith("/fee-receipt")) setOpenMenuKey("fee receipt");
+    else if (path.startsWith("/payment")) setOpenMenuKey("payment");
     else setOpenMenuKey(null);
   }, [location.pathname]);
 
@@ -199,6 +235,66 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
     },
   ];
 
+  const teachermenus = [
+    {
+      label: "Dashboard",
+      icon: <DashboardIcon />,
+      to: "/dashboard",
+      alwaysHighlight: true
+    },
+    {
+      label: "Profile",
+      icon: <AccountCircleIcon />,
+      key: "profile",
+      children: [
+        { label: "View Profile", to: "/profile/view" },
+        { label: "Edit Profile", to: "/profile/edit" },
+      ],
+    },
+    {
+      label: "Promote Students",
+      icon: <UpgradeIcon />,
+      key: "promote students",
+      children: [
+        { label: "Promote Request", to: "/promote-Students/promote-request" },
+      ],
+    },
+    {
+      label: "Libaray",
+      icon: <LocalLibraryIcon />,
+      key: "libaray",
+      children: [
+        { label: "View Books", to: "/library/view-books" },
+      ],
+    },
+    {
+      label: "Services",
+      icon: <VideoCallIcon />,
+      key: "Services",
+      children: [
+        { label: "Refer a friend", to: "https://quranacademy.live/pages/website/refer_friend.php", external: true },
+        { label: "Qard-e-Hasana", to: "https://quranacademy.live/pages/website/scholarship.php", external: true },
+      ],
+    },
+    {
+      label: "Policies",
+      icon: <CardGiftcardIcon />,
+      to: "https://quranacademy.live/pages/website/policies.php",
+      alwaysHighlight: false,
+      external: true,
+    },
+    {
+      label: "Contact Us",
+      icon: <PaymentIcon />,
+      to: "https://quranacademy.live/pages/website/contact.php",
+      alwaysHighlight: false,
+      external: true,
+    },
+  ];
+
+  // Use teacher menus if userType is 'teacher', otherwise use admin menus
+  const activeMenus = userType === 'teacher' ? teachermenus : menus;
+
   const drawerContent = (
     <Box
       sx={{
@@ -210,7 +306,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
         px: collapsed ? 0 : 0.5,
       }}
     >
-      <Toolbar sx={{ display: "flex", alignItems: "center", mb: 2, px:  "9px !important"  }}>
+      <Toolbar sx={{ display: "flex", alignItems: "center", mb: 2, px: "9px !important" }}>
         {collapsed ? (
           <img src={logo} style={{ width: "40px", height: "40px" }} alt="logo" />
         ) : (
@@ -226,11 +322,11 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
       </Toolbar>
       <Divider />
       <List component="nav" disablePadding>
-        {menus.map((item) => {
+        {activeMenus.map((item) => {
           if (item.children) {
             const isOpen = openMenuKey === item.key;
             return (
-              <React.Fragment key={item.key}>
+              <React.Fragment key={item.key || item.label}>
                 <ListItemButton
                   onClick={() => toggleMenu(item.key)}
                   sx={{
@@ -287,6 +383,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
                 label={item.label}
                 to={item.to}
                 alwaysHighlight={item.alwaysHighlight}
+                external={item.external}
                 onClick={() => {
                   if (mobileOpen) handleDrawerToggle();
                 }}
