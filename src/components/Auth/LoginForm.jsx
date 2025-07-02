@@ -40,8 +40,14 @@ const LoginForm = ({ onLogin }) => {
     }
 
     // Simulate login
-     onLogin(email); // <-- Add
-    navigate('/dashboard');
+    onLogin(email); // <-- Add
+    if (email === 'test@teacher.com') {
+      navigate('/teacher/dashboard');
+    } else if (email === 'test@student.com') {
+      navigate('/student/dashboard');
+    } else {
+      navigate('/admin/dashboard');
+    }
   };
 
   return (

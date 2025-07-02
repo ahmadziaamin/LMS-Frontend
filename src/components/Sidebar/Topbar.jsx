@@ -1,9 +1,11 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Typography, useTheme, useMediaQuery } from '@mui/material';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const Topbar = ({ toggleSidebar, toggleCollapse, collapsed }) => {
+const Topbar = ({ toggleSidebar, toggleCollapse, collapsed, onLogout }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery('(max-width:991px)');
   return (
     <div style={{
       display: 'flex',
@@ -16,11 +18,11 @@ const Topbar = ({ toggleSidebar, toggleCollapse, collapsed }) => {
     }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <MenuIcon 
-          sx={{ cursor: 'pointer', mr: 2 }} 
-          onClick={toggleCollapse}
+          sx={{ cursor: 'pointer', mr: 2, display: 'block' }} 
+          onClick={isMobile ? toggleSidebar : toggleCollapse}
         />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+      <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={onLogout}>
         <LoginOutlinedIcon sx={{ mr: collapsed ? 0 : 1 }} />
         {!collapsed && <Typography>Logout</Typography>}
       </div>

@@ -125,11 +125,13 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
     setOpenMenuKey((prevKey) => (prevKey === key ? null : key));
   };
 
+  const dashboardRoute = userType === 'admin' ? '/admin/dashboard' : userType === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
+
   const menus = [
     {
       label: "Dashboard",
       icon: <DashboardIcon />,
-      to: "/dashboard",
+      to: dashboardRoute,
       alwaysHighlight: true
     },
     {
@@ -239,7 +241,7 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
     {
       label: "Dashboard",
       icon: <DashboardIcon />,
-      to: "/dashboard",
+      to: dashboardRoute,
       alwaysHighlight: true
     },
     {
@@ -292,8 +294,68 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle, window, collapsed, toggleColl
     },
   ];
 
+  const studentmenus = [
+    {
+      label: "Dashboard",
+      icon: <DashboardIcon />,
+      to: dashboardRoute,
+      alwaysHighlight: true
+    },
+    {
+      label: "Profile",
+      icon: <AccountCircleIcon />,
+      key: "profile",
+      children: [
+        { label: "View Profile", to: "/profile/view" },
+        { label: "Edit Profile", to: "/profile/edit" },
+      ],
+    },
+    {
+      label: "Libaray",
+      icon: <LocalLibraryIcon />,
+      key: "libaray",
+      children: [
+        { label: "Add Books", to: "/library/add-books" },
+        { label: "View Books", to: "/library/view-books" },
+        { label: "Upload Books", to: "/library/upload-books" },
+      ],
+    },
+    {
+      label: "Forms",
+      icon: <ListIcon />,
+      key: "forms",
+      children: [
+        { label: "Leave Form", to: "/student/ex-student" },
+        { label: "Feedback Form", to: "/student/enrolled-student" },
+      ],
+    },
+    {
+      label: "Services",
+      icon: <VideoCallIcon />,
+      key: "services",
+      children: [
+        { label: "Refer a friend", to: "https://quranacademy.live/pages/website/refer_friend.php", external: true },
+        { label: "Qard-e-Hasana", to: "https://quranacademy.live/pages/website/scholarship.php", external: true },
+      ],
+    },
+    {
+      label: "Policies",
+      icon: <CardGiftcardIcon />,
+      to: "https://quranacademy.live/pages/website/policies.php",
+      alwaysHighlight: false,
+      external: true,
+    },
+    {
+      label: "Contact Us",
+      icon: <PaymentIcon />,
+      to: "https://quranacademy.live/pages/website/contact.php",
+      alwaysHighlight: false,
+      external: true,
+    },
+  ];
+
   // Use teacher menus if userType is 'teacher', otherwise use admin menus
-  const activeMenus = userType === 'teacher' ? teachermenus : menus;
+  const activeMenus = userType === 'admin' ? menus : userType === 'teacher' ? teachermenus : studentmenus;
 
   const drawerContent = (
     <Box

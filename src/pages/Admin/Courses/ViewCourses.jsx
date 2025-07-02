@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
+  Chip, 
   Button, 
   IconButton, 
   TextField,
   InputAdornment,
-  Chip,
-  useTheme,
-  useMediaQuery
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import {
   FileCopy as CopyIcon,
@@ -18,68 +19,89 @@ import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
+  MoreVert as MoreVertIcon,
   Search as SearchIcon,
   ViewColumn as ViewColumnIcon
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const CareerRequest = () => {
-  // Generate 30 dummy student records
-  const generateStudents = () => {
-    const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
-    const cities = ['New York', 'Toronto', 'London', 'Sydney', 'Karachi', 'Mumbai', 'Dubai'];
-    const genders = ['Male', 'Female', 'Other'];
-    const statuses = ['Active', 'Pending', 'Rejected'];
-    
-    return Array.from({ length: 30 }, (_, i) => ({
-      id: i + 1,
-      courseId: `STU${1000 + i}`,
-      fullName: `Student ${i + 1}`,
-      gender: genders[Math.floor(Math.random() * genders.length)],
-      country: countries[Math.floor(Math.random() * countries.length)],
-      city: cities[Math.floor(Math.random() * cities.length)],
-      phoneNo: `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`,
-      email: `student${i + 1}@example.com`,
-      password: `pass${1000 + i}`,
-      status: statuses[Math.floor(Math.random() * statuses.length)]
-    }));
-  };
+const ViewCourses = () => {
+  const coursesData = [
+    {
+      id: 1,
+      courseId: 'OQACSR1004',
+      name: 'Hifz e Quran with Tajweed',
+      category: 'Level IV',
+      duration: '1',
+      teacher: 'Usman Mehboob',
+      status: 'Deactive'
+    },
+    {
+      id: 2,
+      courseId: 'OQACSR1003',
+      name: 'Learn Quran with Tajweed',
+      category: 'Level-III',
+      duration: '1',
+      teacher: 'Muhammad Junaid',
+      status: 'Active'
+    },
+    {
+      id: 3,
+      courseId: 'OQACSR1002',
+      name: 'Learn Recitation of Quran',
+      category: 'Level-II',
+      duration: '1',
+      teacher: 'Abdur Rehman',
+      status: 'Active'
+    },
+    {
+      id: 4,
+      courseId: 'OQACSR1001',
+      name: 'Learn Quranic Studies for beginner',
+      category: 'Level-I',
+      duration: '1',
+      teacher: 'Hafiz Muhammad Usman',
+      status: 'Active'
+    }
+  ];
 
-  const [studentsData] = useState(generateStudents());
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sortBy, setSortBy] = useState('fullName');
+  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [sortBy, setSortBy] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchText, setSearchText] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
   const [columnVisibilityAnchor, setColumnVisibilityAnchor] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     courseId: true,
-    fullName: true,
-    gender: true,
-    country: true,
-    city: true,
-    phoneNo: true,
-    email: true,
-    password: true,
+    name: true,
+    category: true,
+    duration: true,
+    teacher: true,
     status: true,
     actions: true
   });
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width:991px)');
-
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-    setPage(0);
+    setPage(0); // Reset to first page when searching
   };
 
-  const filteredData = studentsData.filter(student => 
-    student.courseId.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchText.toLowerCase()) ||
-    student.phoneNo.includes(searchText)
+  const filteredData = coursesData.filter(course => 
+    course.courseId.toLowerCase().includes(searchText.toLowerCase()) ||
+    course.name.toLowerCase().includes(searchText.toLowerCase()) ||
+    course.category.toLowerCase().includes(searchText.toLowerCase()) ||
+    course.teacher.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleColumnVisibilityOpen = (event) => {
     setColumnVisibilityAnchor(event.currentTarget);
@@ -114,66 +136,58 @@ const CareerRequest = () => {
       visible: visibleColumns.courseId
     },
     {
-      id: 'fullName',
-      label: 'Full Name',
-      align: 'left',
-      minWidth: 180,
-      sortable: true,
-      visible: visibleColumns.fullName
-    },
-    {
-      id: 'gender',
-      label: 'Gender',
-      align: 'left',
-      minWidth: 100,
-      sortable: true,
-      visible: visibleColumns.gender
-    },
-    {
-      id: 'country',
-      label: 'Country',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.country
-    },
-    {
-      id: 'city',
-      label: 'City',
-      align: 'left',
-      minWidth: 120,
-      sortable: true,
-      visible: visibleColumns.city
-    },
-    {
-      id: 'phoneNo',
-      label: 'Phone No',
-      align: 'left',
-      minWidth: 150,
-      sortable: true,
-      visible: visibleColumns.phoneNo
-    },
-    {
-      id: 'email',
-      label: 'Email',
+      id: 'name',
+      label: 'Course Name',
       align: 'left',
       minWidth: 200,
       sortable: true,
-      visible: visibleColumns.email
+      visible: visibleColumns.name
     },
     {
-      id: 'password',
-      label: 'Password',
+      id: 'category',
+      label: 'Category',
+      align: 'left',
+      minWidth: 100,
+      sortable: true,
+      visible: visibleColumns.category
+    },
+    {
+      id: 'duration',
+      label: 'Duration',
+      align: 'left',
+      minWidth: 80,
+      render: (row) => `${row.duration} year`,
+      visible: visibleColumns.duration
+    },
+    {
+      id: 'teacher',
+      label: 'Assign Teachers',
       align: 'left',
       minWidth: 150,
-      render: (row) => '••••••••', // Masked password
-      visible: visibleColumns.password
+      sortable: true,
+      visible: visibleColumns.teacher
+    },
+    {
+      id: 'status',
+      label: 'Status(Live)',
+      align: 'left',
+      minWidth: 100,
+      sortable: true,
+      render: (row) => (
+        <Chip
+          label={row.status}
+          color={row.status === 'Active' ? 'success' : 'error'}
+          size="small"
+          variant="outlined"
+        />
+      ),
+      visible: visibleColumns.status
     },
     {
       id: 'actions',
       label: 'Actions',
       align: 'center',
-      minWidth: 150,
+      minWidth: 120,
       render: (row) => (
         <Box display="flex" justifyContent="center">
           <IconButton size="small" onClick={() => handleView(row)}>
@@ -206,20 +220,21 @@ const CareerRequest = () => {
     setSortBy(columnId);
   };
 
-  const handleView = (student) => {
-    console.log('View student:', student);
+  const handleEdit = (course) => {
+    console.log('Edit course:', course);
   };
 
-  const handleEdit = (student) => {
-    console.log('Edit student:', student);
+  const handleDelete = (course) => {
+    console.log('Delete course:', course);
   };
 
-  const handleDelete = (student) => {
-    console.log('Delete student:', student);
+  const handleView = (course) => {
+    console.log('View course:', course);
   };
 
   const handleExport = (type) => {
     console.log(`Export as ${type}`);
+    handleMenuClose();
   };
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -239,14 +254,14 @@ const CareerRequest = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} flexDirection={isMobile ? 'column' : 'row'}>
-        <Typography variant="h4" mb={isMobile ? 2 : 0}>Career Requests</Typography>
-        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} width={isMobile ? '100%' : 'auto'}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">All Courses</Typography>
+        <Box>
           <Button 
             variant="outlined" 
             startIcon={<CopyIcon />} 
             onClick={() => handleExport('copy')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Copy
           </Button>
@@ -254,7 +269,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ExcelIcon />} 
             onClick={() => handleExport('csv')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             CSV
           </Button>
@@ -262,7 +277,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ExcelIcon />} 
             onClick={() => handleExport('excel')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Excel
           </Button>
@@ -270,7 +285,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<PdfIcon />} 
             onClick={() => handleExport('pdf')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             PDF
           </Button>
@@ -278,7 +293,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<PrintIcon />} 
             onClick={() => handleExport('print')}
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Print
           </Button>
@@ -286,7 +301,6 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ViewColumnIcon />} 
             onClick={handleColumnVisibilityOpen}
-            sx={{ width: isMobile ? '100%' : 'auto' }}
           >
             Column visibility
           </Button>
@@ -295,12 +309,12 @@ const CareerRequest = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Students {filteredData.length}
+          Total Courses {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
           size="small"
-          placeholder="Search students..."
+          placeholder="Search..."
           value={searchText}
           onChange={handleSearchChange}
           InputProps={{
@@ -325,10 +339,10 @@ const CareerRequest = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-         actions={false}
+        actions={false}
       />
     </Box>
   );
 };
 
-export default CareerRequest;
+export default ViewCourses;

@@ -1,16 +1,16 @@
 import React from "react";
 import { Box, Paper, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { teacherdashboardData } from "../components/DashBoard/DashBoardData";
+import { studentdashboardData } from "../../components/DashBoard/DashBoardData";
 
-const TeacherDashboard = () => {
+const StudentDashboard = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", mb: 3 }}>
-        Dashboard
+        Student Dashboard
       </Typography>
 
       <Box
@@ -23,7 +23,7 @@ const TeacherDashboard = () => {
           }
         }}
       >
-        {teacherdashboardData.map((item) => (
+        {studentdashboardData.map((item) => (
           <Paper
             key={item.id}
             elevation={3}
@@ -67,4 +67,4 @@ const TeacherDashboard = () => {
   );
 };
 
-export default TeacherDashboard;
+export default StudentDashboard; 

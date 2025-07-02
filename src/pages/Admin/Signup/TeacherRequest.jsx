@@ -6,9 +6,7 @@ import {
   IconButton, 
   TextField,
   InputAdornment,
-  Chip,
-  useTheme,
-  useMediaQuery
+  Chip
 } from '@mui/material';
 import {
   FileCopy as CopyIcon,
@@ -23,7 +21,7 @@ import {
 } from '@mui/icons-material';
 import DataGrid from '../../Common/DataGrid';
 
-const CareerRequest = () => {
+const TeacherRequest = () => {
   // Generate 30 dummy student records
   const generateStudents = () => {
     const countries = ['USA', 'Canada', 'UK', 'Australia', 'Pakistan', 'India', 'UAE'];
@@ -65,9 +63,6 @@ const CareerRequest = () => {
     status: true,
     actions: true
   });
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width:991px)');
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -169,6 +164,7 @@ const CareerRequest = () => {
       render: (row) => '••••••••', // Masked password
       visible: visibleColumns.password
     },
+  
     {
       id: 'actions',
       label: 'Actions',
@@ -239,14 +235,14 @@ const CareerRequest = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} flexDirection={isMobile ? 'column' : 'row'}>
-        <Typography variant="h4" mb={isMobile ? 2 : 0}>Career Requests</Typography>
-        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} width={isMobile ? '100%' : 'auto'}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">Teacher Requests</Typography>
+        <Box>
           <Button 
             variant="outlined" 
             startIcon={<CopyIcon />} 
             onClick={() => handleExport('copy')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Copy
           </Button>
@@ -254,7 +250,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ExcelIcon />} 
             onClick={() => handleExport('csv')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             CSV
           </Button>
@@ -262,7 +258,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ExcelIcon />} 
             onClick={() => handleExport('excel')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Excel
           </Button>
@@ -270,7 +266,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<PdfIcon />} 
             onClick={() => handleExport('pdf')} 
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             PDF
           </Button>
@@ -278,7 +274,7 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<PrintIcon />} 
             onClick={() => handleExport('print')}
-            sx={{ mr: isMobile ? 0 : 1, mb: isMobile ? 1 : 0, width: isMobile ? '100%' : 'auto' }}
+            sx={{ mr: 1 }}
           >
             Print
           </Button>
@@ -286,7 +282,6 @@ const CareerRequest = () => {
             variant="outlined" 
             startIcon={<ViewColumnIcon />} 
             onClick={handleColumnVisibilityOpen}
-            sx={{ width: isMobile ? '100%' : 'auto' }}
           >
             Column visibility
           </Button>
@@ -295,7 +290,7 @@ const CareerRequest = () => {
       
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="subtitle1">
-          Total Students {filteredData.length}
+          Total Teacher {filteredData.length}
         </Typography>
         <TextField
           variant="outlined"
@@ -325,10 +320,10 @@ const CareerRequest = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onSort={handleSort}
-         actions={false}
+       actions={false}
       />
     </Box>
   );
 };
 
-export default CareerRequest;
+export default TeacherRequest;

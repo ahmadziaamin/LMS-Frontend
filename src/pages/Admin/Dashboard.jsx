@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Paper, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { dashboardData } from "../components/DashBoard/DashBoardData";
+import { dashboardData } from "../../components/DashBoard/DashBoardData";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Dashboard = () => {
           }
         }}
       >
-        {dashboardData.map((item) => (
+        {dashboardData?.map((item) => (
           <Paper
             key={item.id}
             elevation={3}

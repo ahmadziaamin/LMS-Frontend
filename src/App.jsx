@@ -11,7 +11,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Topbar from "./components/Sidebar/Topbar";
 
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Admin/Dashboard";
 import AddCourse from "./pages/Courses/AddCourse";
 import ViewCourses from "./pages/Courses/ViewCourses";
 import Login from "./pages/Auth/Login";
@@ -47,7 +47,8 @@ import CreateLinks from "./pages/Zoom/CreateLinks";
 import FeeReceipt from "./pages/FeeReceipt/FeeReceipt";
 
 import "./App.css";
-import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
+import StudentDashboard from "./pages/Student/StudentDashboard";
 
 const drawerWidth = 240;
 const collapsedWidth = 64;
@@ -72,7 +73,13 @@ function App() {
 
  const handleLogin = (email) => {  
     setLoggedIn(true);
-    setUserType(email === 'test@teacher.com' ? 'teacher' : 'admin');
+    if (email === 'test@teacher.com') {
+      setUserType('teacher');
+    } else if (email === 'test@student.com') {
+      setUserType('student');
+    } else {
+      setUserType('admin');
+    }
   };
 
   const handleLogout = () => {
@@ -105,12 +112,13 @@ function App() {
               sm: loggedIn ? `${collapsed ? collapsedWidth : drawerWidth}px` : 0 
             },
             minHeight: "100vh",
+            minWidth: { xs: '100vw', sm: `calc(100vw - ${collapsed ? collapsedWidth : drawerWidth}px)` },
             bgcolor: "#f5f5f5",
             transition: (theme) => theme.transitions.create(['margin', 'width'], {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.leavingScreen,
             }),
-            width: { sm: `calc(100vw - ${collapsed ? collapsedWidth : drawerWidth}px) !important` },
+            width: { xs: '100vw', sm: `calc(100vw - ${collapsed ? collapsedWidth : drawerWidth}px) !important` },
           }}
         >
           {loggedIn && (
@@ -118,6 +126,7 @@ function App() {
               toggleSidebar={handleDrawerToggle} 
               toggleCollapse={toggleCollapse}
               collapsed={collapsed}
+              onLogout={handleLogout}
             />
           )}
           {/* <Toolbar />  */}
@@ -126,7 +135,7 @@ function App() {
               path="/auth/login"
               element={
                 loggedIn ? (
-                  <Navigate to="/dashboard" replace />
+                  <Navigate to={userType === 'admin' ? '/admin/dashboard' : userType === 'teacher' ? '/teacher/dashboard' : '/student/dashboard'} replace />
                 ) : (
                   <Login onLogin={handleLogin} />
                 )
@@ -135,11 +144,10 @@ function App() {
             <Route path="/auth/reset-password" element={<ResetPassword />} />
 
             <Route
-              path="/dashboard"
+              path="/admin/dashboard"
               element={
                 <PrivateRoute loggedIn={loggedIn}>
-                  {userType == "admin" ?<Dashboard />:  <TeacherDashboard /> }
-                
+                  <Dashboard />
                 </PrivateRoute>
               }
             />
@@ -350,12 +358,32 @@ function App() {
               }
             />
 
+            {/* Teacher Dashboard */}
+            <Route
+              path="/teacher/dashboard"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <TeacherDashboard />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Student Dashboard */}
+            <Route
+              path="/student/dashboard"
+              element={
+                <PrivateRoute loggedIn={loggedIn}>
+                  <StudentDashboard />
+                </PrivateRoute>
+              }
+            />
+
             {/* Catch-All Route */}
             <Route
               path="*"
               element={
                 loggedIn ? (
-                  <Navigate to="/dashboard" replace />
+                  <Navigate to={userType === 'admin' ? '/admin/dashboard' : userType === 'teacher' ? '/teacher/dashboard' : '/student/dashboard'} replace />
                 ) : (
                   <Navigate to="/auth/login" replace />
                 )

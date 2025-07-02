@@ -214,3 +214,71 @@ export const teacherdashboardData = [
   },
  
 ];
+
+export const studentdashboardData = [
+  {
+    id: 1,
+    title: "Profile",
+    count: "Student",
+    subtitle: "STU2MN007",
+    route: "/profile/view",
+    emoji: "😊",
+    color: "#2196F3"
+  },
+  {
+    id: 3,
+    title: "Assigned Courses",
+    count: "4",
+    route: "/student/assigned-student",
+    emoji: "📚",
+    color: "#FF9800"
+  },
+  {
+    id: 7,
+    title: "Enrolled Courses",
+    count: "0",
+    route: "/student/enrolled-student",
+    emoji: "🎓",
+    color: "#00BCD4"
+  },
+  {
+    id: 5,
+    title: "Quit Form",
+    count: "1",
+    route: "/student/ex-student",
+    emoji: "🚪",
+    color: "#F44336"
+  },
+  {
+    id: 8,
+    title: "Manual Payments",
+    count: "5:5817.85",
+    route: "/payment/manual-payments",
+    emoji: "💵",
+    color: "#8BC34A"
+  },
+  {
+    id: 10,
+    title: "Send Receipt",
+    count: "11",
+    route: "/fee-receipt/send-receipt",
+    emoji: "🧾",
+    color: "#795548"
+  },
+  {
+    id: 13,
+    title: "Student Signup",
+    count: "74",
+    route: "/signup/student-request",
+    emoji: "📝",
+    color: "#E91E63"
+  },
+  {
+    id: 20,
+    title: "Feedback Form",
+    count: "1",
+    route: "/student/enrolled-student",
+    emoji: "🗣️",
+    color: "#FF9800"
+  }
+];
